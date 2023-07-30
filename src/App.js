@@ -1,23 +1,21 @@
-import logo from './logo.svg';
+
 import './App.css';
 
-function App() {
+import ChatRoom from './components/ChatRoom';
+import SignInGoogle from './components/SignInGoogle';
+import { auth, firestore } from './firebase'
+import { useAuthState } from 'react-firebase-hooks/auth';
+
+const App = () => {
+  const [user, Loading] = useAuthState(auth);
+
+  if (Loading) {
+    return <p>Loading...</p>
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {user ? <ChatRoom firestore={firestore} auth={auth} /> : <SignInGoogle />}
+
     </div>
   );
 }
